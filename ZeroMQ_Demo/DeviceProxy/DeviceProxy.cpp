@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <iostream>
+#include "getTime.h"
 
 int main(int argc, char** argv)
 {
@@ -22,9 +23,9 @@ int main(int argc, char** argv)
     snprintf(addr, sizeof(addr), "tcp://%s:%s", argv[1], argv[2]);
     void* router = zmq_socket(context, ZMQ_ROUTER);
     int rc = zmq_bind(router, addr);
-    std::cout << time(NULL) << "router bind" << addr << (rc ? "error" : "ok") << std::endl;
+    std::cout << getTime() << " router bind:" << addr << (rc ? " error" : " ok") << std::endl;
     if (rc) {
-        std::cout << time(NULL) << "router bind error:" << zmq_strerror(zmq_errno()) << std::endl;
+        std::cout << getTime() << "router bind error:" << zmq_strerror(zmq_errno()) << std::endl;
         zmq_close(router);
         zmq_ctx_term(context);
         return -2;
@@ -33,9 +34,9 @@ int main(int argc, char** argv)
     snprintf(addr, sizeof(addr), "tcp://%s:%s", argv[3], argv[4]);
     void* dealer = zmq_socket(context, ZMQ_DEALER);
     rc = zmq_bind(dealer, addr);
-    std::cout << time(NULL) << "router bind:" << addr<< (rc ? "error" : "ok") << std::endl;
+    std::cout << getTime() << " router bind:" << addr<< (rc ? " error" : " ok") << std::endl;
     if (rc) {
-        std::cout << time(NULL) << "router bind error:" << zmq_strerror(zmq_errno()) << std::endl;
+        std::cout << getTime() << "router bind error:" << zmq_strerror(zmq_errno()) << std::endl;
         zmq_close(router);
         zmq_close(dealer);
         zmq_ctx_term(context);

@@ -4,6 +4,7 @@
 #include <time.h>
 #include <windows.h>
 #include <iostream>
+#include "getTime.h"
 
 int main(int argc, char** argv)
 {
@@ -31,17 +32,17 @@ int main(int argc, char** argv)
         return -2;
     }
 
-    std::cout << "client zmq_connect" << addr << " done!" << std::endl;
+    std::cout << "client zmq_connect " << addr << " done!" << std::endl;
 
     char buf[128] = { 0 };
 
     while (1) {
-        snprintf(buf, (int)sizeof(buf), "index=%s&cmd=hello&time=%ld", argv[3], (int)time(NULL)); 
+        snprintf(buf, (int)sizeof(buf), " index=%s &cmd=hello &time=%ld", argv[3], (int)time(NULL)); 
         rec = zmq_send(request, buf, strlen(buf), 0);
-        std::cout << time(NULL) << "recv request(" << buf << ") from client, rec=" << rec << ",request.len =" << strlen(buf) << std::endl;
+        std::cout << getTime() << " send request(" << buf << ") to server, rec=" << rec << ",request.len =" << strlen(buf) << std::endl;
         rec = zmq_recv(request, buf, sizeof(buf), 0);
-        std::cout << time(NULL) << " recv reply(" << buf << ") from server, rec =" << rec << ",reply.len = " << strlen(buf) << std::endl;
-        Sleep(3);
+        std::cout << getTime() << " recv reply(" << buf << ") from server, rec =" << rec << ",reply.len = " << strlen(buf) << std::endl;
+        Sleep(3000);
     }
 
     zmq_close(request);
